@@ -1,0 +1,55 @@
+{
+    "heading": "Create Company",
+    "fields": [{
+            "name": "firstName",
+            "label": "First Name",
+            "type": "text",
+            "required": true,
+            "errorMessage": "Please enter the first name"
+        },
+        {
+            "name": "lastName",
+            "label": "Last Name",
+            "type": "text",
+            "required": true,
+            "errorMessage": "Please enter the last name"
+        },
+        {
+            "name": "emailName",
+            "label": "Email",
+            "type": "text",
+            "required": true,
+            "errorMessage": "Please enter the email"
+        },
+        {
+            "name": "gender",
+            "label": "Gender",
+            "type": "radio",
+            "options": [{ "name": "male", "value": "male" }, { "name": "female", "value": "female" }],
+            "required": false
+        },
+        {
+            "name": "dob",
+            "label": "Date of birth",
+            "type": "date",
+            "required": false
+        },
+        {
+            "name": "staticDD",
+            "label": "static Dropdown",
+            "type": "dropdown",
+            "required": false,
+            "options": [{ "name": "static 1", "value": "static 1" }, { "name": "static 2", "value": "static 2" }],
+        },
+        {
+            "name": "dynamicDD",
+            "label": "Dynamic Dropdown",
+            "type": "dropdown",
+            "required": false
+        }
+    ],
+    "button": {
+        "add": "Add",
+        "cancel": "Cancel"
+    }
+}

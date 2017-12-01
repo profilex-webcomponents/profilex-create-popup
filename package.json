@@ -1,0 +1,18 @@
+{
+    "name": "profilex-create-popup",
+    "version": "1.0.0",
+    "main": "index.js",
+    "repository": "https://github.com/profilex-webcomponents/profilex-create-popup.git",
+    "author": "<balasuresh_varadharajan@trimble.com>",
+    "license": "MIT",
+    "flat": true,
+    "dependencies": {
+        "@polymer/polymer": "^2.2.0",
+        "@webcomponents/webcomponentsjs": "^1.0.19",
+        "profilex-common-css": "^1.0.5",
+        "profilex-polymer-behaviors": "^1.0.1"
+    },
+    "resolutions": {
+        "@polymer/polymer": "2.2.0"
+    }
+}

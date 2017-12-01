@@ -1,0 +1,234 @@
+<link rel="import" href="node_modules/@polymer/polymer/polymer-element.html">
+<link rel="import" href="node_modules/@polymer/polymer/lib/elements/dom-if.html">
+<link rel="import" href="node_modules/@polymer/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="node_modules/profilex-common-css/profilex-common-css.html">
+<link rel="import" href="node_modules/profilex-polymer-behaviors/api-behaviors.html">
+
+<link rel="import">
+<dom-module id="profilex-create-popup">
+    <template>
+    <style include="profilex-common-css">
+      .popup-container {
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .popup-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        [hidden] {
+            display: none !important;
+        }
+    </style>
+    <template is="dom-if" if="{{showPopup}}" id="createpopup" >
+    <div class="popup-container">
+       <div class="popup-content">
+           <span class="close" on-click="_closeBox">&times;</span>
+           <div class="popup-header">
+           <h2 class="popup-header-title">{{popupConfig.heading}}</h2>
+       </div>
+        <div class="popup-body">
+            <template is="dom-if" if="{{!_isConfigReadyAsBool}}">
+                Loading..
+            </template>
+    <template is="dom-repeat" items="{{popupConfig.fields}}">
+                <template is="dom-if" if="{{checkFieldType(item.type, 'text', item.showFieldOn)}}">
+                    <div class="form-element-row">
+                        <label>{{item.label}}: </label><input type="text" value="" name="{{item.name}}">
+                    </div>
+                </template>
+    <template is="dom-if" if="{{checkFieldType(item.type, 'radio', item.showFieldOn)}}">
+                    <div class="form-element-row">
+                        <label>{{item.label}}: </label>
+                        <template is="dom-repeat" items="{{item.options}}" as="option">
+                            <input type="radio" name="{{item.name}}" value="{{option.value}}"> {{option.value}}
+                        </template>
+    </div>
+    </template>
+    <template is="dom-if" if="{{checkFieldType(item.type, 'date', item.showFieldOn)}}">
+                    <div class="form-element-row">
+                        <label>{{item.label}}: </label><input type="date" value="" name="{{item.name}}">
+                    </div>
+                </template>
+    <template is="dom-if" if="{{checkFieldType(item.type, 'dropdown', item.showFieldOn)}}">
+                    <div class="form-element-row">
+                         <label>{{item.label}}: </label>
+                        <select name="{{item.name}}">
+                        <template is="dom-repeat" items="{{item.options}}" as="option">
+                            <option value="{{option.value}}">{{option.name}}</option>
+                        </template>
+    </select>
+    </div>
+    </template>
+
+    <template is="dom-if" if="{{checkFieldType(item.type, 'toggle', item.showFieldOn)}}">
+        <div class="form-element-row">
+            <a id="{{field.id}}" on-click="_toggle"> {{item.label}}</a>
+        </div>
+    </template>
+
+    </template>
+    </div>
+
+    <div class="popup-footer">
+        <button class="button button-primary" on-click="_closeBox">{{popupConfig.button.cancel}}</button>
+        <button class="button button-primary">{{popupConfig.button.add}}</button>
+    </div>
+    </div>
+    </div>
+    </template>
+    </template>
+
+    <script>
+        /**
+         * @customElement
+         * @polymer
+         */
+        class ProfilexCreatePopup extends Polymer.Element {
+
+            static get is() {
+                return 'profilex-create-popup';
+            }
+            static get behaviors() {
+                return [ApiBehaviors];
+            }
+            static get properties() {
+                return {
+                    showPopup: Boolean,
+                    isConfigReady: {
+                        type: String,
+                        observer: '_onConfigReady'
+                    },
+                    _isConfigReadyAsBool: {
+                        type: Boolean,
+                        value: true
+                    },
+                    type: {
+                        type: String,
+                        observer: '_onTypeChanged'
+                    },
+                    layoutSchema: {
+                        type: Object,
+                        observer: '_onLayoutChanged',
+                    },
+                    updatedLayoutSchema: {
+                        type: Object,
+                        value: {},
+                    },
+                    popupConfig: {
+                        type: Object,
+                        notify: true
+                    }
+                };
+            }
+            ready() {
+                super.ready();
+                this.showPopup = true;
+            }
+            _closeBox() {
+                this.showPopup = false;
+            }
+            _onLayoutChanged() {
+                if (this.layoutSchema) {
+                    this.onBeforeLoadConfig(this.layoutSchema);
+                }
+            }
+            _onTypeChanged() {
+                if (this.type && !this.layoutSchema) {
+                    //Load layout schema based on the type
+                    switch (this.type) {
+                        case 'user':
+                            ApiBehaviors.loadJSON('layoutSchema/user.json', function(response) {
+                                // Parse JSON string into object
+                                this.onBeforeLoadConfig(JSON.parse(response));
+                            }.bind(this));
+                            break;
+                        case 'company':
+                            ApiBehaviors.loadJSON('layoutSchema/company.json', function(response) {
+                                // Parse JSON string into object
+                                this.onBeforeLoadConfig(JSON.parse(response));
+                            }.bind(this));
+                            break;
+                    }
+                }
+            }
+
+            _onConfigReady() {
+                this._isConfigReadyAsBool = (this.isConfigReady == undefined || (this.isConfigReady.toLowerCase() == 'true'));
+                this.onBeforeLoadConfig(this.layoutSchema);
+            }
+            onBeforeLoadConfig(layoutSchema) {
+                //this.callFunc = new Function('return ' + this.onPopupLoad);
+                //this.callFunc(); // can now be called here or elsewhere in the Polymer object
+
+                this.layoutSchema = layoutSchema;
+                if (this._isConfigReadyAsBool) {
+                    layoutSchema.fields.forEach(function(field) {
+                        if (field.type == "toggle") {
+                            this[field.modelKey] = field.value;
+                            field.label = (field.value) ? field.labelOn : field.labelOff;
+                            console.log(field.label);
+                        }
+                    }.bind(this));
+                    this.popupConfig = layoutSchema;
+                } else {
+                    var event = new CustomEvent('pre-load-config', {
+                        detail: {
+                            layoutSchema: layoutSchema
+                        }
+                    });
+                    document.dispatchEvent(event);
+                }
+            }
+            checkFieldType(fieldType, value, showFieldOn) {
+                console.log(showFieldOn, this[showFieldOn]);
+                return (fieldType == value && (!showFieldOn || this[showFieldOn]));
+            }
+            _toggle(e) {
+                console.log(e.model);
+                var fieldIndex = e.model.__data.index;
+                var field = e.model.__data.item;
+                field.value = !field.value;
+                field.label = (field.value) ? field.labelOn : field.labelOff;
+                this.popupConfig.fields[fieldIndex] = field;
+                var tmp = this.popupConfig;
+                //this.onBeforeLoadConfig(this.popupConfig);
+                this.set('popupConfig', []);
+                this.$.createpopup.render();
+                this[field.modelKey] = field.value;
+                this.set('popupConfig', tmp);
+                this.$.createpopup.render();
+            }
+        }
+
+        window.customElements.define(ProfilexCreatePopup.is, ProfilexCreatePopup);
+    </script>
+</dom-module>
