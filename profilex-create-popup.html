@@ -49,58 +49,59 @@
         }
     </style>
     <template is="dom-if" if="{{showPopup}}" id="createpopup" >
-    <div class="popup-container">
-       <div class="popup-content">
-           <span class="close" on-click="_closeBox">&times;</span>
-           <div class="popup-header">
-           <h2 class="popup-header-title">{{popupConfig.heading}}</h2>
-       </div>
-        <div class="popup-body">
-            <template is="dom-if" if="{{!_isConfigReadyAsBool}}">
-                Loading..
-            </template>
-    <template is="dom-repeat" items="{{popupConfig.fields}}">
-                <template is="dom-if" if="{{checkFieldType(item.type, 'text', item.showFieldOn)}}">
-                    <div class="form-element-row">
-                        <label>{{item.label}}: </label><input type="text" value="" name="{{item.name}}">
-                    </div>
-                </template>
-    <template is="dom-if" if="{{checkFieldType(item.type, 'radio', item.showFieldOn)}}">
-                    <div class="form-element-row">
-                        <label>{{item.label}}: </label>
-                        <template is="dom-repeat" items="{{item.options}}" as="option">
-                            <input type="radio" name="{{item.name}}" value="{{option.value}}"> {{option.value}}
-                        </template>
-    </div>
-    </template>
-    <template is="dom-if" if="{{checkFieldType(item.type, 'date', item.showFieldOn)}}">
-                    <div class="form-element-row">
-                        <label>{{item.label}}: </label><input type="date" value="" name="{{item.name}}">
-                    </div>
-                </template>
-    <template is="dom-if" if="{{checkFieldType(item.type, 'dropdown', item.showFieldOn)}}">
-                    <div class="form-element-row">
-                         <label>{{item.label}}: </label>
-                        <select name="{{item.name}}">
-                        <template is="dom-repeat" items="{{item.options}}" as="option">
-                            <option value="{{option.value}}">{{option.name}}</option>
-                        </template>
-    </select>
-    </div>
-    </template>
-
-    <template is="dom-if" if="{{checkFieldType(item.type, 'toggle', item.showFieldOn)}}">
-        <div class="form-element-row">
-            <a id="{{field.id}}" on-click="_toggle"> {{item.label}}</a>
+        <div class="popup-container" id="createpopup-container">
+        <div class="popup-content">
+            <span class="close" on-click="_closeBox">&times;</span>
+            <div class="popup-header">
+            <h2 class="popup-header-title">{{popupConfig.heading}}</h2>
         </div>
-    </template>
+            <div class="popup-body">
+                <template is="dom-if" if="{{!_isConfigReadyAsBool}}" id="ready-loading">
+                    Loading..
+                </template>
+    <form name="create-profilex-form" id="create-popup-form">
+        <template is="dom-repeat" items="{{popupConfig.fields}}">
+                    <template is="dom-if" if="{{checkFieldType(item.type, 'text', item.showFieldOn)}}">
+                        <div class="form-element-row">
+                            <label>{{item.label}}: </label><input type="text" value="" name="{{item.name}}">
+                        </div>
+                    </template>
+        <template is="dom-if" if="{{checkFieldType(item.type, 'radio', item.showFieldOn)}}">
+                        <div class="form-element-row">
+                            <label>{{item.label}}: </label>
+                            <template is="dom-repeat" items="{{item.options}}" as="option">
+                                <input type="radio" name="{{item.name}}" value="{{option.value}}"> {{option.value}}
+                            </template>
+        </div>
+        </template>
+        <template is="dom-if" if="{{checkFieldType(item.type, 'date', item.showFieldOn)}}">
+                        <div class="form-element-row">
+                            <label>{{item.label}}: </label><input type="date" value="" name="{{item.name}}">
+                        </div>
+                    </template>
+        <template is="dom-if" if="{{checkFieldType(item.type, 'dropdown', item.showFieldOn)}}">
+                        <div class="form-element-row">
+                            <label>{{item.label}}: </label>
+                            <select name="{{item.name}}">
+                            <template is="dom-repeat" items="{{item.options}}" as="option">
+                                <option value="{{option.value}}">{{option.name}}</option>
+                            </template>
+        </select>
+        </div>
+        </template>
 
+        <template is="dom-if" if="{{checkFieldType(item.type, 'toggle', item.showFieldOn)}}">
+            <div class="form-element-row">
+                <a id="{{field.id}}" on-click="_toggle"> {{item.label}}</a>
+            </div>
+        </template>
+    </form>
     </template>
     </div>
 
     <div class="popup-footer">
         <button class="button button-primary" on-click="_closeBox">{{popupConfig.button.cancel}}</button>
-        <button class="button button-primary">{{popupConfig.button.add}}</button>
+        <button class="button button-primary" on-click="_submitBox">{{popupConfig.button.add}}</button>
     </div>
     </div>
     </div>
@@ -156,6 +157,10 @@
             _closeBox() {
                 this.showPopup = false;
             }
+            _submitBox() {
+                var formData = new FormData(document.getElementById('create-popup-form'));
+                console.log(formData);
+            }
             _onLayoutChanged() {
                 if (this.layoutSchema) {
                     this.onBeforeLoadConfig(this.layoutSchema);
@@ -195,7 +200,6 @@
                         if (field.type == "toggle") {
                             this[field.modelKey] = field.value;
                             field.label = (field.value) ? field.labelOn : field.labelOff;
-                            console.log(field.label);
                         }
                     }.bind(this));
                     this.popupConfig = layoutSchema;
@@ -209,11 +213,9 @@
                 }
             }
             checkFieldType(fieldType, value, showFieldOn) {
-                console.log(showFieldOn, this[showFieldOn]);
                 return (fieldType == value && (!showFieldOn || this[showFieldOn]));
             }
             _toggle(e) {
-                console.log(e.model);
                 var fieldIndex = e.model.__data.index;
                 var field = e.model.__data.item;
                 field.value = !field.value;
