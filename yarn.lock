@@ -10,9 +10,9 @@
   version "1.0.19"
   resolved "https://registry.yarnpkg.com/@webcomponents/webcomponentsjs/-/webcomponentsjs-1.0.19.tgz#13849257b86a04dcf434fb145398d2cd081dee79"
 
-profilex-common-css@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/profilex-common-css/-/profilex-common-css-1.0.5.tgz#8a058fb63adfe36a91248c15a274284175d601f4"
+profilex-common-css@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/profilex-common-css/-/profilex-common-css-1.0.7.tgz#2bedd5825c663613a97664c0c57c633af9fec2c4"
 
 profilex-polymer-behaviors@^1.0.1:
   version "1.0.1"

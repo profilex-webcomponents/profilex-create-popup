@@ -9,7 +9,7 @@
     "dependencies": {
         "@polymer/polymer": "^2.2.0",
         "@webcomponents/webcomponentsjs": "^1.0.19",
-        "profilex-common-css": "^1.0.5",
+        "profilex-common-css": "^1.0.7",
         "profilex-polymer-behaviors": "^1.0.1"
     },
     "resolutions": {
