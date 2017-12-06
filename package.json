@@ -1,6 +1,6 @@
 {
     "name": "profilex-create-popup",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "main": "index.js",
     "repository": "https://github.com/profilex-webcomponents/profilex-create-popup.git",
     "author": "<balasuresh_varadharajan@trimble.com>",
