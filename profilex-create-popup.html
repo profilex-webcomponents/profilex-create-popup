@@ -6,8 +6,6 @@
 <link rel="import" href="/node_modules_dev/profilex-common-css/components/flexgrid.html">
 <link rel="import" href="/node_modules_dev/profilex-common-css/components/formcontrols.html">
 <link rel="import" href="/node_modules_dev/profilex-polymer-behaviors/api-behaviors.html">
-
-<link rel="import">
 <dom-module id="profilex-create-popup">
 
     <template>
@@ -68,84 +66,98 @@
         [hidden] {
             display: none !important;
         }
+        .alert-box.warning {
+            background-color: #f08a24;
+            border-color: #de770f;
+            color: #FFFFFF;
+        }
+        .alert-box.success {
+            background-color: #43AC6A;
+            border-color: #3a945b;
+            color: #FFFFFF;
+        }
     </style>
-
     <template is="dom-if" if="{{showPopupBoolean}}" id="createpopup">
-        <div class="popup-container" id="createpopup-container">
-        <!--div class="popup-content" !-->
-            <div class="cell large-6 callout secondary"  id="createpopup-container">
-                
-                    <span class="close" on-click="_closeBox">&times;</span>
-                    <h3>{{popupConfig.heading}}</h3>
-            
-            <!--div class="popup-header">
-                <h2 class="popup-header-title"></h2>
-                <span class="close" on-click="_closeBox">&times;</span>
+   <div class="popup-container" id="createpopup-container">
+      <!--div class="popup-content" !-->
+      <div class="cell large-6 callout secondary"  id="createpopup-container">
+         <span class="close" on-click="_closeBox">&times;</span>
+         <h3>{{popupConfig.heading}}</h3>
+         <!--div class="popup-header">
+            <h2 class="popup-header-title"></h2>
+            <span class="close" on-click="_closeBox">&times;</span>
             </div!-->
-            <div class="popup-body">
-                <template is="dom-if" if="{{!_isConfigReadyAsBool}}" id="ready-loading">
-                    Loading..
+         <div class="popup-body">
+            <template is="dom-if" if="{{!_isConfigReadyAsBool}}" id="ready-loading">
+               Loading..
+            </template>
+    <dom-if if="{{_isCreated}}">
+        <template>
+                 <span class="alert-box success">   {{popupConfig.message.success}} </span>
                 </template>
+    </dom-if>
+    <dom-if if="{{_isError}}">
+        <template>
+                 <span class="alert-box warning">   {{popupConfig.message.warning}}</span>
+                </template>
+    </dom-if>
     <form name="create-profilex-form" id="create-popup-form">
         <template is="dom-repeat" items="{{popupConfig.fields}}">
-                    <template is="dom-if" if="{{checkFieldType(item.type, 'text', item.showFieldOn)}}">
-                        <div class="row">
-                            <div class="large-12 columns">
-                            <label>{{item.label}}: </label><input type="text" value="" name="{{item.name}}">
-                            </div>
+                  <template is="dom-if" if="{{checkFieldType(item.type, 'text', item.showFieldOn)}}">
+                     <div class="row">
+                        <div class="large-12 columns">
+                           <label>{{item.label}}: </label><input type="text" value="" name="{{item.name}}" required="{{item.required}}">
                         </div>
-                    </template>
+                     </div>
+                  </template>
         <template is="dom-if" if="{{checkFieldType(item.type, 'radio', item.showFieldOn)}}">
-                        <div class="row">
-                            <div class="large-12 columns">
-                            <label>{{item.label}}: </label>
-                            <template is="dom-repeat" items="{{item.options}}" as="option">
-                                <input type="radio" name="{{item.name}}" value="{{option.value}}"> {{option.value}}
-                            </template>
+                     <div class="row">
+                        <div class="large-12 columns">
+                           <label>{{item.label}}: </label>
+                           <template is="dom-repeat" items="{{item.options}}" as="option">
+                              <input type="radio" name="{{item.name}}" value="{{option.value}}"> {{option.value}}
+                           </template>
         </div>
         </div>
         </template>
         <template is="dom-if" if="{{checkFieldType(item.type, 'date', item.showFieldOn)}}">
-                        <div class="row">
-                            <div class="large-12 columns">
-                            <label>{{item.label}}: </label><input type="date" value="" name="{{item.name}}">
-                            </div>
+                     <div class="row">
+                        <div class="large-12 columns">
+                           <label>{{item.label}}: </label><input type="date" value="" name="{{item.name}}">
                         </div>
-                    </template>
+                     </div>
+                  </template>
         <template is="dom-if" if="{{checkFieldType(item.type, 'dropdown', item.showFieldOn)}}">
-                        <div class="row">
-                            <div class="large-12 columns">
-                            <label>{{item.label}}: </label>
-                            <select name="{{item.name}}">
-                            <template is="dom-repeat" items="{{item.options}}" as="option">
-                                <option value="{{option.value}}">{{option.name}}</option>
-                            </template>
+                     <div class="row">
+                        <div class="large-12 columns">
+                           <label>{{item.label}}: </label>
+                           <select name="{{item.name}}">
+                              <template is="dom-repeat" items="{{item.options}}" as="option">
+                                 <option value="{{option.value}}">{{option.name}}</option>
+                              </template>
         </select>
         </div>
         </div>
         </template>
-
         <template is="dom-if" if="{{checkFieldType(item.type, 'toggle', item.showFieldOn)}}">
-            <div class="row">
-                <div class="large-12 columns morelink">
-                <a id="{{field.id}}" on-click="_toggle"> {{item.label}}</a><br/>
-                </div>
-            </div>
+                     <div class="row">
+                        <div class="large-12 columns morelink">
+                           <a id="{{field.id}}" on-click="_toggle"> {{item.label}}</a><br/>
+                        </div>
+                     </div>
+                  </template>
+
         </template>
     </form>
-    </template>
     </div>
-
     <div class="popup-footer">
         <button class="button button-primary" on-click="_closeBox">{{popupConfig.button.cancel}}</button>
         <button class="button button-primary" on-click="_submitBox">{{popupConfig.button.add}}</button>
     </div>
-
     </div>
     <!--/div!-->
     </div>
     </template>
-
     </template>
 
     <script>
@@ -192,6 +204,21 @@
                     popupConfig: {
                         type: Object,
                         notify: true
+                    },
+                    postUrl: String,
+                    bearerToken: String,
+                    xApikey: String,
+                    sendAsJson: {
+                        type: String,
+                        value: "true"
+                    },
+                    _isCreated: {
+                        type: Boolean,
+                        value: false
+                    },
+                    _isError: {
+                        type: Boolean,
+                        value: false
                     }
                 };
             }
@@ -212,8 +239,53 @@
                 }
             }
             _submitBox() {
-                var formData = new FormData(document.getElementById('create-popup-form'));
-                console.log(formData);
+                var formData = new FormData(this.shadowRoot.getElementById('create-popup-form'));
+
+                /*var formElem = this.shadowRoot.getElementById('create-popup-form');
+                Object.keys(formElem).forEach(function(i) {
+                    if (!isNaN(i)) {
+                        console.log(formElem[i].getAttribute('name'), formElem[i].getAttribute('value'));
+                        formData.append(formElem[i].getAttribute('name'), formElem[i].getAttribute('value'));
+                    }
+                });*/
+                var convertedJSON = {},
+                    it = formData.entries(),
+                    n;
+
+                while (n = it.next()) {
+                    if (!n || n.done) break;
+                    convertedJSON[n.value[0]] = n.value[1];
+                }
+
+                var req = new XMLHttpRequest();
+
+                xhr.onreadystatechange = handler.bind(this);
+
+                xhr.open('POST', this.postUrl);
+
+                xhr.setRequestHeader('Accept', 'application/json');
+                if (this.xApikey) {
+                    xhr.setRequestHeader('x-apikey', xApiToken);
+                } else if (this.bearerToken) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + accessToken)
+                }
+                if (this.sendAsJson == 'true') {
+                    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                    xhr.send(JSON.stringify(convertedJSON));
+                } else {
+                    xhr.send(formData);
+                }
+
+                function handler(e) {
+                    console.log(e.target);
+                    if (e.target.readyState === 4) {
+                        if (e.target.status === 201) {
+                            this._isCreated = true;
+                        } else {
+                            this._isError = true;
+                        }
+                    }
+                }
             }
             _onLayoutChanged() {
                 if (this.layoutSchema) {

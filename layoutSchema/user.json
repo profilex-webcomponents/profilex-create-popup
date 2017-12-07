@@ -4,6 +4,7 @@
             "name": "firstName",
             "label": "First Name",
             "type": "text",
+            "value": "",
             "required": true,
             "errorMessage": "Please enter the first name"
         },
@@ -11,13 +12,15 @@
             "name": "lastName",
             "label": "Last Name",
             "type": "text",
-            "required": true,
+            "value": "",
+            "required": false,
             "errorMessage": "Please enter the last name"
         },
         {
             "name": "emailName",
             "label": "Email",
             "type": "text",
+            "value": "",
             "required": true,
             "errorMessage": "Please enter the email"
         },
@@ -66,5 +69,9 @@
     "button": {
         "add": "Add User",
         "cancel": "Cancel"
+    },
+    "message": {
+        "success": "User was successfully created",
+        "warning": "Error in creating user"
     }
 }
