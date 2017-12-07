@@ -22,41 +22,44 @@
             "errorMessage": "Please enter the email"
         },
         {
+            "name": "morefields",
+            "id": "morefields",
+            "defaultValue": false,
+            "value": false,
+            "labelOff": "More",
+            "labelOn": "Fewer",
+            "type": "toggle",
+            "modelKey": "morefields"
+        },
+
+        {
             "name": "gender",
             "label": "Gender",
             "type": "radio",
             "options": [{ "name": "male", "value": "male" }, { "name": "female", "value": "female" }],
-            "required": false
+            "required": false,
+            "showFieldOn": "morefields"
         },
         {
             "name": "dob",
             "label": "Date of birth",
             "type": "date",
-            "required": false
-        },
-        {
-            "name": "moreLink",
-            "id": "moreLink",
-            "defaultValue": false,
-            "value": false,
-            "labelOff": "More link",
-            "labelOn": "Fewer link",
-            "type": "toggle",
-            "modelKey": "moreLink"
+            "required": false,
+            "showFieldOn": "morefields"
         },
         {
             "name": "staticDD",
             "label": "static Dropdown",
             "type": "dropdown",
             "required": false,
-            "showFieldOn": "moreLink",
+            "showFieldOn": "morefields",
             "options": [{ "name": "static 1", "value": "static 1" }, { "name": "static 2", "value": "static 2" }]
         },
         {
             "name": "dynamicDD",
             "label": "Dynamic Dropdown",
             "type": "dropdown",
-            "showFieldOn": "moreLink",
+            "showFieldOn": "morefields",
             "required": false
         }
     ],
