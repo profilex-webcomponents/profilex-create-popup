@@ -1,14 +1,22 @@
 <link rel="import" href="/node_modules/@polymer/polymer/polymer-element.html">
 <link rel="import" href="/node_modules/@polymer/polymer/lib/elements/dom-if.html">
 <link rel="import" href="/node_modules/@polymer/polymer/lib/elements/dom-repeat.html">
-<link rel="import" href="/node_modules_dev/profilex-common-css/components/profilex-common-css.html">
+<link rel="import" href="/node_modules_dev/profilex-common-css/components/reset.html">
+<link rel="import" href="/node_modules_dev/profilex-common-css/components/common.html">
+<link rel="import" href="/node_modules_dev/profilex-common-css/components/flexgrid.html">
+<link rel="import" href="/node_modules_dev/profilex-common-css/components/formcontrols.html">
 <link rel="import" href="/node_modules_dev/profilex-polymer-behaviors/api-behaviors.html">
 
 <link rel="import">
 <dom-module id="profilex-create-popup">
 
     <template>
-    <style include="profilex-common-css">
+        
+        <style include="profilex-reset"></style>
+        <style include="profilex-common"></style>
+        <style include="profilex-flexgrid"></style>
+        <style include="profilex-formcontrols"></style>
+    <style>
         .popup-container {
             position: fixed;
             /* Stay in place */
@@ -31,7 +39,7 @@
         }
         /* Modal Content */
         
-        .popup-content {
+        .callout {
             background-color: #fefefe;
             margin: auto;
             padding: 20px;
@@ -61,11 +69,16 @@
 
     <template is="dom-if" if="{{showPopupBoolean}}" id="createpopup">
         <div class="popup-container" id="createpopup-container">
-        <div class="popup-content">
-            <span class="close" on-click="_closeBox">&times;</span>
-            <div class="popup-header">
-            <h2 class="popup-header-title">{{popupConfig.heading}}</h2>
-        </div>
+        <!--div class="popup-content" !-->
+            <div class="cell large-6 callout secondary"  id="createpopup-container">
+                
+                    <span class="close" on-click="_closeBox">&times;</span>
+                    <h3>{{popupConfig.heading}}</h3>
+            
+            <!--div class="popup-header">
+                <h2 class="popup-header-title"></h2>
+                <span class="close" on-click="_closeBox">&times;</span>
+            </div!-->
             <div class="popup-body">
                 <template is="dom-if" if="{{!_isConfigReadyAsBool}}" id="ready-loading">
                     Loading..
@@ -73,25 +86,32 @@
     <form name="create-profilex-form" id="create-popup-form">
         <template is="dom-repeat" items="{{popupConfig.fields}}">
                     <template is="dom-if" if="{{checkFieldType(item.type, 'text', item.showFieldOn)}}">
-                        <div class="form-element-row">
+                        <div class="row">
+                            <div class="large-12 columns">
                             <label>{{item.label}}: </label><input type="text" value="" name="{{item.name}}">
+                            </div>
                         </div>
                     </template>
         <template is="dom-if" if="{{checkFieldType(item.type, 'radio', item.showFieldOn)}}">
-                        <div class="form-element-row">
+                        <div class="row">
+                            <div class="large-12 columns">
                             <label>{{item.label}}: </label>
                             <template is="dom-repeat" items="{{item.options}}" as="option">
                                 <input type="radio" name="{{item.name}}" value="{{option.value}}"> {{option.value}}
                             </template>
         </div>
+        </div>
         </template>
         <template is="dom-if" if="{{checkFieldType(item.type, 'date', item.showFieldOn)}}">
-                        <div class="form-element-row">
+                        <div class="row">
+                            <div class="large-12 columns">
                             <label>{{item.label}}: </label><input type="date" value="" name="{{item.name}}">
+                            </div>
                         </div>
                     </template>
         <template is="dom-if" if="{{checkFieldType(item.type, 'dropdown', item.showFieldOn)}}">
-                        <div class="form-element-row">
+                        <div class="row">
+                            <div class="large-12 columns">
                             <label>{{item.label}}: </label>
                             <select name="{{item.name}}">
                             <template is="dom-repeat" items="{{item.options}}" as="option">
@@ -99,11 +119,14 @@
                             </template>
         </select>
         </div>
+        </div>
         </template>
 
         <template is="dom-if" if="{{checkFieldType(item.type, 'toggle', item.showFieldOn)}}">
-            <div class="form-element-row">
+            <div class="row">
+                <div class="large-12 columns">
                 <a id="{{field.id}}" on-click="_toggle"> {{item.label}}</a>
+                </div>
             </div>
         </template>
     </form>
@@ -114,7 +137,9 @@
         <button class="button button-primary" on-click="_closeBox">{{popupConfig.button.cancel}}</button>
         <button class="button button-primary" on-click="_submitBox">{{popupConfig.button.add}}</button>
     </div>
+
     </div>
+    <!--/div!-->
     </div>
     </template>
 
