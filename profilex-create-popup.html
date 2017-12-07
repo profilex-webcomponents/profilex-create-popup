@@ -6,22 +6,31 @@
 
 <link rel="import">
 <dom-module id="profilex-create-popup">
+
     <template>
     <style include="profilex-common-css">
-      .popup-container {
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
-            padding-top: 100px; /* Location of the box */
+        .popup-container {
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            padding-top: 100px;
+            /* Location of the box */
             left: 0;
             top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgb(0,0,0); /* Fallback color */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
         }
-
         /* Modal Content */
+        
         .popup-content {
             background-color: #fefefe;
             margin: auto;
@@ -29,26 +38,28 @@
             border: 1px solid #888;
             width: 450px;
         }
-
         /* The Close Button */
+        
         .close {
             color: #aaaaaa;
             float: right;
             font-size: 28px;
             font-weight: bold;
         }
-
+        
         .close:hover,
         .close:focus {
             color: #000;
             text-decoration: none;
             cursor: pointer;
         }
+        
         [hidden] {
             display: none !important;
         }
     </style>
-    <template is="dom-if" if="{{showPopupBoolean}}" id="createpopup" >
+
+    <template is="dom-if" if="{{showPopupBoolean}}" id="createpopup">
         <div class="popup-container" id="createpopup-container">
         <div class="popup-content">
             <span class="close" on-click="_closeBox">&times;</span>
@@ -106,6 +117,7 @@
     </div>
     </div>
     </template>
+
     </template>
 
     <script>
@@ -183,26 +195,17 @@
             _onTypeChanged() {
                 if (this.type && !this.layoutSchema) {
                     //Load layout schema based on the type
-                    switch (this.type) {
-                        case 'user':
-                            ApiBehaviors.loadJSON('/node_modules_dev/profilex-create-popup/layoutSchema/user.json', function(response) {
-                                // Parse JSON string into object
-                                this.onBeforeLoadConfig(JSON.parse(response));
-                            }.bind(this));
-                            break;
-                        case 'company':
-                            ApiBehaviors.loadJSON('/node_modules_dev/profilex-create-popup/layoutSchema/company.json', function(response) {
-                                // Parse JSON string into object
-                                this.onBeforeLoadConfig(JSON.parse(response));
-                            }.bind(this));
-                            break;
-                    }
+                    ApiBehaviors.loadJSON('/node_modules_dev/profilex-create-popup/layoutSchema/' + this.type + '.json', function(response) {
+                        // Parse JSON string into object
+                        //this.onBeforeLoadConfig(JSON.parse(response));
+                        this.layoutSchema = JSON.parse(response);
+                    }.bind(this));
                 }
             }
 
             _onConfigReady() {
                 this._isConfigReadyAsBool = (this.isConfigReady == undefined || (this.isConfigReady.toLowerCase() == 'true'));
-                this.onBeforeLoadConfig(this.layoutSchema);
+                //this.onBeforeLoadConfig(this.layoutSchema);
             }
             onBeforeLoadConfig(layoutSchema) {
                 //this.callFunc = new Function('return ' + this.onPopupLoad);
@@ -218,12 +221,12 @@
                     }.bind(this));
                     this.popupConfig = layoutSchema;
                 } else {
-                    var event = new CustomEvent('pre-load-config', {
+                    var event = new CustomEvent('preloadconfig', {
                         detail: {
                             layoutSchema: layoutSchema
                         }
                     });
-                    document.dispatchEvent(event);
+                    this.dispatchEvent(event);
                 }
             }
             checkFieldType(fieldType, value, showFieldOn) {
