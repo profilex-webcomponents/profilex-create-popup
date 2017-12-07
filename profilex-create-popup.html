@@ -1,8 +1,8 @@
 <link rel="import" href="/node_modules/@polymer/polymer/polymer-element.html">
 <link rel="import" href="/node_modules/@polymer/polymer/lib/elements/dom-if.html">
 <link rel="import" href="/node_modules/@polymer/polymer/lib/elements/dom-repeat.html">
-<link rel="import" href="/node_modules/profilex-common-css/components/profilex-common-css.html">
-<link rel="import" href="/node_modules/profilex-polymer-behaviors/api-behaviors.html">
+<link rel="import" href="/node_modules_dev/profilex-common-css/components/profilex-common-css.html">
+<link rel="import" href="/node_modules_dev/profilex-polymer-behaviors/api-behaviors.html">
 
 <link rel="import">
 <dom-module id="profilex-create-popup">
@@ -185,13 +185,13 @@
                     //Load layout schema based on the type
                     switch (this.type) {
                         case 'user':
-                            ApiBehaviors.loadJSON('/node_modules/profilex-create-popup/layoutSchema/user.json', function(response) {
+                            ApiBehaviors.loadJSON('/node_modules_dev/profilex-create-popup/layoutSchema/user.json', function(response) {
                                 // Parse JSON string into object
                                 this.onBeforeLoadConfig(JSON.parse(response));
                             }.bind(this));
                             break;
                         case 'company':
-                            ApiBehaviors.loadJSON('/node_modules/profilex-create-popup/layoutSchema/company.json', function(response) {
+                            ApiBehaviors.loadJSON('/node_modules_dev/profilex-create-popup/layoutSchema/company.json', function(response) {
                                 // Parse JSON string into object
                                 this.onBeforeLoadConfig(JSON.parse(response));
                             }.bind(this));
