@@ -154,7 +154,7 @@
                         observer: '_onTypeChanged'
                     },
                     layoutSchema: {
-                        type: Object,
+                        type: String,
                         observer: '_onLayoutChanged',
                     },
                     updatedLayoutSchema: {
@@ -189,7 +189,7 @@
             }
             _onLayoutChanged() {
                 if (this.layoutSchema) {
-                    this.onBeforeLoadConfig(this.layoutSchema);
+                    this.onBeforeLoadConfig(JSON.parse(this.layoutSchema));
                 }
             }
             _onTypeChanged() {
@@ -198,7 +198,7 @@
                     ApiBehaviors.loadJSON('/node_modules_dev/profilex-create-popup/layoutSchema/' + this.type + '.json', function(response) {
                         // Parse JSON string into object
                         //this.onBeforeLoadConfig(JSON.parse(response));
-                        this.layoutSchema = JSON.parse(response);
+                        this.layoutSchema = response;
                     }.bind(this));
                 }
             }
@@ -210,8 +210,6 @@
             onBeforeLoadConfig(layoutSchema) {
                 //this.callFunc = new Function('return ' + this.onPopupLoad);
                 //this.callFunc(); // can now be called here or elsewhere in the Polymer object
-
-                this.layoutSchema = layoutSchema;
                 if (this._isConfigReadyAsBool) {
                     layoutSchema.fields.forEach(function(field) {
                         if (field.type == "toggle") {
@@ -221,12 +219,12 @@
                     }.bind(this));
                     this.popupConfig = layoutSchema;
                 } else {
-                    var event = new CustomEvent('preloadconfig', {
+                    this.event = new CustomEvent('pre-load-config', {
                         detail: {
                             layoutSchema: layoutSchema
                         }
                     });
-                    this.dispatchEvent(event);
+                    window.dispatchEvent(this.event);
                 }
             }
             checkFieldType(fieldType, value, showFieldOn) {
