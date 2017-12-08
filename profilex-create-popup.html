@@ -1,11 +1,11 @@
 <link rel="import" href="/node_modules/@polymer/polymer/polymer-element.html">
 <link rel="import" href="/node_modules/@polymer/polymer/lib/elements/dom-if.html">
 <link rel="import" href="/node_modules/@polymer/polymer/lib/elements/dom-repeat.html">
-<link rel="import" href="/node_modules_dev/profilex-common-css/components/reset.html">
-<link rel="import" href="/node_modules_dev/profilex-common-css/components/common.html">
-<link rel="import" href="/node_modules_dev/profilex-common-css/components/flexgrid.html">
-<link rel="import" href="/node_modules_dev/profilex-common-css/components/formcontrols.html">
-<link rel="import" href="/node_modules_dev/profilex-polymer-behaviors/api-behaviors.html">
+<link rel="import" href="/components/profilex-common-css/components/reset.html">
+<link rel="import" href="/components/profilex-common-css/components/common.html">
+<link rel="import" href="/components/profilex-common-css/components/flexgrid.html">
+<link rel="import" href="/components/profilex-common-css/components/formcontrols.html">
+<link rel="import" href="/components/profilex-polymer-behaviors/api-behaviors.html">
 <dom-module id="profilex-create-popup">
 
     <template>
@@ -295,7 +295,7 @@
             _onTypeChanged() {
                 if (this.type && !this.layoutSchema) {
                     //Load layout schema based on the type
-                    ApiBehaviors.loadJSON('/node_modules_dev/profilex-create-popup/layoutSchema/' + this.type + '.json', function(response) {
+                    ApiBehaviors.loadJSON('/components/profilex-create-popup/layoutSchema/' + this.type + '.json', function(response) {
                         // Parse JSON string into object
                         //this.onBeforeLoadConfig(JSON.parse(response));
                         this.layoutSchema = response;
